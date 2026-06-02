@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-stellar-700;
+  }
+
+  body {
+    @apply bg-stellar-900 text-stellar-100;
+  }
+
+  ::-webkit-scrollbar {
+    @apply w-2;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-stellar-800;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-stellar-600;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-stellar-900 disabled:pointer-events-none disabled:opacity-50;
+  }
+
+  .btn-primary {
+    @apply btn bg-cosmic-600 text-white hover:bg-cosmic-500 focus:ring-cosmic-500;
+  }
+
+  .btn-secondary {
+    @apply btn border border-stellar-600 bg-stellar-800 text-stellar-200 hover:bg-stellar-700 focus:ring-stellar-500;
+  }
+
+  .btn-danger {
+    @apply btn bg-imperial-600 text-white hover:bg-imperial-500 focus:ring-imperial-500;
+  }
+
+  .card {
+    @apply rounded-xl border border-stellar-700 bg-stellar-800 p-6 shadow-lg;
+  }
+
+  .input {
+    @apply w-full rounded-lg border border-stellar-600 bg-stellar-900 px-3 py-2 text-sm text-stellar-100 placeholder-stellar-400 focus:border-cosmic-500 focus:outline-none focus:ring-1 focus:ring-cosmic-500;
+  }
+}
