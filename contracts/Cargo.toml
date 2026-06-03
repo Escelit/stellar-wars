@@ -1,0 +1,14 @@
+[workspace]
+resolver = "2"
+members = ["mint_controller"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+
+[profile.release]
+opt-level = "z"
+overflow-checks = true
+lto = true
+debug = 0
+codegen-units = 1

@@ -9,7 +9,7 @@ The README roadmap defines 12 milestones. "50% completion" means delivering the 
 | # | Milestone | Status Target | Deliverables |
 |---|-----------|--------------|-------------|
 | 1 | Project scaffolding & Stellar SDK integration | ✅ Done | `package.json`, `tsconfig`, Tailwind, folder structure, Stellar SDK wired |
-| 2 | Soroban smart contract architecture | ✅ Done | 3 compiled `.wasm` contracts with full test coverage |
+| 2 | Soroban smart contract architecture | 🟡 50% | MintController implemented with 14 tests (BattleRegistry & Marketplace pending) |
 | 3 | Freighter wallet connection | ✅ Done | `useStellarWallet` hook, connect/disconnect/sign flows |
 | 4 | Deploy contracts to testnet | ✅ Done | Deployed addresses, deployment scripts, CI verify step |
 | 5 | NFT minting UI | ✅ Done | Mint page, commander gallery, transaction flow |
@@ -24,7 +24,7 @@ The README roadmap defines 12 milestones. "50% completion" means delivering the 
 
 ### Week 1 — Foundation & Contracts
 
-#### Day 1 — Monorepo Scaffolding
+#### Day 1 — Monorepo Scaffolding ###
 - Initialize workspace: `package.json`, `tsconfig` (base/client/server), ESLint, Prettier
 - Set up `client/` (Vite + React 18 + Tailwind CSS)
 - Set up `server/` (Express + TypeScript + Prisma)
@@ -32,15 +32,15 @@ The README roadmap defines 12 milestones. "50% completion" means delivering the 
 - Create `AGENTS.md`, `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`
 - Configure `scripts/` stubs (`deploy-contracts.sh`, `testnet-setup.sh`)
 
-#### Day 2 — Soroban Contracts: MintController
-- Initialize `contracts/` Cargo workspace
-- Implement `MintController` contract:
+#### Day 2 — Soroban Contracts: MintController ✅
+- ✅ Initialize `contracts/` Cargo workspace
+- ✅ Implement `MintController` contract:
   - Storage types (`Commander`, `Rarity` enums)
   - `initialize`, `mint_commander`, `transfer`, `mark_fallen`
   - `get_commander`, `get_owned_commanders`
   - `pause` / `unpause`
-- Write unit tests covering: minting, transfer, fallen marking, paused state, invalid stats
-- Verify `cargo test` passes
+- ✅ Write unit tests covering: minting, transfer, fallen marking, paused state, invalid stats
+- ✅ Verify `cargo test` passes — all 14 tests pass, zero warnings
 
 #### Day 3 — Soroban Contracts: BattleRegistry
 - Implement `BattleRegistry` contract:
