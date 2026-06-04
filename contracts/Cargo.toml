@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["mint_controller"]
+members = ["mint_controller", "battle_registry"]
 
 [workspace.package]
 version = "0.1.0"
