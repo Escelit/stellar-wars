@@ -9,7 +9,7 @@ The README roadmap defines 12 milestones. "50% completion" means delivering the 
 | # | Milestone | Status Target | Deliverables |
 |---|-----------|--------------|-------------|
 | 1 | Project scaffolding & Stellar SDK integration | ✅ Done | `package.json`, `tsconfig`, Tailwind, folder structure, Stellar SDK wired |
-| 2 | Soroban smart contract architecture | 🟡 50% | MintController implemented with 14 tests (BattleRegistry & Marketplace pending) |
+| 2 | Soroban smart contract architecture | 🟡 75% | MintController (14 tests), BattleRegistry (16 tests), Marketplace pending |
 | 3 | Freighter wallet connection | ✅ Done | `useStellarWallet` hook, connect/disconnect/sign flows |
 | 4 | Deploy contracts to testnet | ✅ Done | Deployed addresses, deployment scripts, CI verify step |
 | 5 | NFT minting UI | ✅ Done | Mint page, commander gallery, transaction flow |
@@ -42,13 +42,13 @@ The README roadmap defines 12 milestones. "50% completion" means delivering the 
 - ✅ Write unit tests covering: minting, transfer, fallen marking, paused state, invalid stats
 - ✅ Verify `cargo test` passes — all 14 tests pass, zero warnings
 
-#### Day 3 — Soroban Contracts: BattleRegistry
-- Implement `BattleRegistry` contract:
-  - Storage types (`BattleRecord`, `BattleStrategy`, `BattleOutcome`, `CommanderStats`)
-  - `initialize`, `record_battle`, `get_battle`, `get_player_battles`, `get_commander_stats`
-  - Morale system (victory +5, defeat −10, fallen → 0)
-- Write unit tests covering: battle recording, stats queries, morale edge cases
-- Verify `cargo test` passes
+#### Day 3 — Soroban Contracts: BattleRegistry ✅
+- ✅ Implement `BattleRegistry` contract:
+  - ✅ Storage types (`BattleRecord`, `BattleStrategy`, `BattleOutcome`, `CommanderStats`)
+  - ✅ `initialize`, `record_battle`, `get_battle`, `get_player_battles`, `get_commander_stats`
+  - ✅ Morale system (victory +5, defeat −10, fallen → 0)
+- ✅ Write unit tests covering: battle recording, stats queries, morale edge cases, pause/unpause
+- ✅ Verify `cargo test` passes — 16 BattleRegistry + 14 MintController = 30 tests pass, zero warnings
 
 #### Day 4 — Soroban Contracts: Marketplace
 - Implement `Marketplace` contract:
