@@ -1,0 +1,12 @@
+[package]
+name = "marketplace"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+soroban-sdk = "26.0.1"
+mint_controller = { path = "../mint_controller" }
+
+[lib]
+crate-type = ["cdylib"]
+doctest = false
