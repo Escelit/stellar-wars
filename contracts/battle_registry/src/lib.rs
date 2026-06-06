@@ -83,9 +83,10 @@ impl BattleRegistry {
         }
         player.require_auth();
 
+        const MAX_MORALE: i32 = 100;
         let morale_after = match &outcome {
             BattleOutcome::Victory => {
-                if morale_before == 0 { 0 } else { morale_before + 5 }
+                if morale_before == 0 { 0 } else { (morale_before + 5).min(MAX_MORALE) }
             }
             BattleOutcome::Defeat => {
                 if morale_before == 0 { 0 } else { morale_before - 10 }
@@ -304,7 +305,7 @@ mod test {
         assert_eq!(record.outcome, BattleOutcome::Victory);
         assert_eq!(record.timestamp, 2000);
         assert_eq!(record.morale_before, 100);
-        assert_eq!(record.morale_after, 105);
+        assert_eq!(record.morale_after, 100);
         assert_eq!(record.player_stats, player_stats);
         assert_eq!(record.opponent_stats, opponent_stats);
     }
@@ -374,7 +375,7 @@ mod test {
 
         let record = client.get_battle(&1).expect("battle should exist");
         assert_eq!(record.id, 1);
-        assert_eq!(record.morale_after, 105);
+        assert_eq!(record.morale_after, 100);
     }
 
     #[test]
@@ -570,21 +571,21 @@ mod test {
         let weak_opponent = vec![&env, 40u32, 40u32, 40u32, 40u32, 40u32];
         let strong_opponent = vec![&env, 95u32, 95u32, 95u32, 95u32, 95u32];
 
-        // Battle 1: victory, morale goes from 100 -> 105
+        // Battle 1: victory capped at max morale 100
         let r1 = client.record_battle(
             &player, &1u32, &String::from_str(&env, "Alpha"),
             &BattleStrategy::Aggressive, &BattleOutcome::Victory, &100i32,
             &player_stats, &weak_opponent,
         );
-        assert_eq!(r1.morale_after, 105);
+        assert_eq!(r1.morale_after, 100);
 
-        // Battle 2: defeat, morale goes from 105 -> 95
+        // Battle 2: defeat, morale goes from 100 -> 90
         let r2 = client.record_battle(
             &player, &1u32, &String::from_str(&env, "Beta"),
-            &BattleStrategy::Defensive, &BattleOutcome::Defeat, &105i32,
+            &BattleStrategy::Defensive, &BattleOutcome::Defeat, &100i32,
             &player_stats, &strong_opponent,
         );
-        assert_eq!(r2.morale_after, 95);
+        assert_eq!(r2.morale_after, 90);
     }
 
     #[test]

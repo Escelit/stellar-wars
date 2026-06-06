@@ -168,6 +168,9 @@ impl Marketplace {
         env.storage()
             .instance()
             .set(&DataKey::Listing(listing_id), &listing);
+        env.storage()
+            .instance()
+            .remove(&DataKey::CommanderListing(listing.commander_id));
 
         log!(&env, "Commander {} bought by {} for {}", listing.commander_id, buyer, listing.price);
     }
@@ -188,10 +191,14 @@ impl Marketplace {
             panic!("listing is not active");
         }
 
+        let commander_id = listing.commander_id;
         listing.is_active = false;
         env.storage()
             .instance()
             .set(&DataKey::Listing(listing_id), &listing);
+        env.storage()
+            .instance()
+            .remove(&DataKey::CommanderListing(commander_id));
 
         log!(&env, "Listing {} cancelled by seller {}", listing_id, seller);
     }

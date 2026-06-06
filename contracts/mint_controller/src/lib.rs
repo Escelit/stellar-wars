@@ -75,6 +75,12 @@ impl MintController {
                 panic!("stat value exceeds maximum");
             }
         }
+        if name.len() == 0 {
+            panic!("name cannot be empty");
+        }
+        if faction.len() == 0 {
+            panic!("faction cannot be empty");
+        }
 
         let id = Self::next_id(&env);
         let minted_at = env.ledger().timestamp();
