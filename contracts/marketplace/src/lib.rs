@@ -749,6 +749,89 @@ mod test {
     }
 
     #[test]
+    fn test_cancel_then_relist_commander() {
+        let (env, mp_client, _admin, _treasury, seller, _buyer, token_id, mc_id) = setup();
+
+        let mc_client = MintControllerClient::new(&env, &mc_id);
+        let token_client = TTokenClient::new(&env, &token_id);
+
+        let stats2 = vec![&env, 50u32, 60u32, 70u32, 80u32, 90u32];
+        mc_client.mint_commander(
+            &seller,
+            &String::from_str(&env, "Nova"),
+            &Rarity::Epic,
+            &String::from_str(&env, "Solari"),
+            &stats2,
+        );
+        token_client.mint(&seller, &10000i128);
+
+        mp_client.list_commander(&seller, &2u32, &200i128);
+        mp_client.cancel_listing(&seller, &1u32);
+
+        let listing = mp_client.list_commander(&seller, &2u32, &250i128);
+        assert_eq!(listing.price, 250);
+        assert!(listing.is_active);
+    }
+
+    #[test]
+    fn test_buy_then_relist_commander() {
+        let (env, mp_client, _admin, _treasury, seller, buyer, token_id, mc_id) = setup();
+
+        let mc_client = MintControllerClient::new(&env, &mc_id);
+        let token_client = TTokenClient::new(&env, &token_id);
+
+        token_client.mint(&buyer, &10000i128);
+
+        mp_client.list_commander(&seller, &1u32, &100i128);
+        mp_client.buy_commander(&buyer, &1u32);
+
+        let commander = mc_client.get_commander(&1).unwrap();
+        assert_eq!(commander.owner, buyer);
+
+        mp_client.list_commander(&buyer, &1u32, &150i128);
+        let listing = mp_client.get_commander_listing(&1).unwrap();
+        assert_eq!(listing.price, 150);
+        assert!(listing.is_active);
+    }
+
+    #[test]
+    #[should_panic(expected = "insufficient balance")]
+    fn test_buy_insufficient_funds() {
+        let env = Env::default();
+        env.mock_all_auths_allowing_non_root_auth();
+        let admin = Address::generate(&env);
+        let treasury = Address::generate(&env);
+        let seller = Address::generate(&env);
+        let buyer = Address::generate(&env);
+
+        let token_id = env.register(TToken, ());
+        let token_client = TTokenClient::new(&env, &token_id);
+        token_client.initialize(&admin);
+
+        let mc_id = env.register(MintController, ());
+        let mc_client = MintControllerClient::new(&env, &mc_id);
+        mc_client.initialize(&admin);
+
+        let mp_id = env.register(Marketplace, ());
+        let mp_client = MarketplaceClient::new(&env, &mp_id);
+        mp_client.initialize(&admin, &treasury, &token_id, &mc_id);
+
+        let stats = vec![&env, 80u32, 70u32, 60u32, 50u32, 90u32];
+        mc_client.mint_commander(
+            &seller,
+            &String::from_str(&env, "Atlas"),
+            &Rarity::Rare,
+            &String::from_str(&env, "Terra"),
+            &stats,
+        );
+
+        token_client.mint(&buyer, &50i128);
+
+        mp_client.list_commander(&seller, &1u32, &100i128);
+        mp_client.buy_commander(&buyer, &1u32);
+    }
+
+    #[test]
     fn test_buy_commander_transfers_ownership() {
         let (env, mp_client, _admin, _treasury, seller, buyer, token_id, mc_id) = setup();
 

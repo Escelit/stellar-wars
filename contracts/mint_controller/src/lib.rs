@@ -508,6 +508,36 @@ mod test {
     }
 
     #[test]
+    #[should_panic(expected = "name cannot be empty")]
+    fn test_mint_empty_name() {
+        let (env, client, _admin, owner) = setup();
+
+        let stats = vec![&env, 10u32, 20u32, 30u32, 40u32, 50u32];
+        client.mint_commander(
+            &owner,
+            &String::from_str(&env, ""),
+            &Rarity::Common,
+            &String::from_str(&env, "Terra"),
+            &stats,
+        );
+    }
+
+    #[test]
+    #[should_panic(expected = "faction cannot be empty")]
+    fn test_mint_empty_faction() {
+        let (env, client, _admin, owner) = setup();
+
+        let stats = vec![&env, 10u32, 20u32, 30u32, 40u32, 50u32];
+        client.mint_commander(
+            &owner,
+            &String::from_str(&env, "Atlas"),
+            &Rarity::Common,
+            &String::from_str(&env, ""),
+            &stats,
+        );
+    }
+
+    #[test]
     fn test_rarity_enum_values() {
         let (env, client, _admin, owner) = setup();
 

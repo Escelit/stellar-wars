@@ -589,6 +589,43 @@ mod test {
     }
 
     #[test]
+    fn test_morale_capped_at_max() {
+        let (env, client, _admin, player) = setup();
+
+        let player_stats = vec![&env, 80u32, 70u32, 60u32, 50u32, 90u32];
+        let weak_opponent = vec![&env, 40u32, 40u32, 40u32, 40u32, 40u32];
+
+        let r1 = client.record_battle(
+            &player, &1u32, &String::from_str(&env, "Alpha"),
+            &BattleStrategy::Aggressive, &BattleOutcome::Victory, &99i32,
+            &player_stats, &weak_opponent,
+        );
+        assert_eq!(r1.morale_after, 100);
+
+        let r2 = client.record_battle(
+            &player, &1u32, &String::from_str(&env, "Beta"),
+            &BattleStrategy::Aggressive, &BattleOutcome::Victory, &100i32,
+            &player_stats, &weak_opponent,
+        );
+        assert_eq!(r2.morale_after, 100);
+    }
+
+    #[test]
+    fn test_morale_from_below_max_not_capped() {
+        let (env, client, _admin, player) = setup();
+
+        let player_stats = vec![&env, 80u32, 70u32, 60u32, 50u32, 90u32];
+        let weak_opponent = vec![&env, 40u32, 40u32, 40u32, 40u32, 40u32];
+
+        let r1 = client.record_battle(
+            &player, &1u32, &String::from_str(&env, "Alpha"),
+            &BattleStrategy::Aggressive, &BattleOutcome::Victory, &90i32,
+            &player_stats, &weak_opponent,
+        );
+        assert_eq!(r1.morale_after, 95);
+    }
+
+    #[test]
     fn test_battle_record_all_strategies() {
         let (env, client, _admin, player) = setup();
 
