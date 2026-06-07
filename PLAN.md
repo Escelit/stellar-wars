@@ -67,13 +67,13 @@ The README roadmap defines 12 milestones. "50% completion" means delivering the 
 - Capture deployed addresses, update `.env.example`
 - Add `contracts:test` and `contracts:deploy` npm scripts
 
-#### Day 6 — Stellar SDK Wrappers
-- Create `src/stellar/config.ts` — network constants
-- Create `src/stellar/contracts.ts` — typed invocation helpers for all 3 contracts
-- Create `src/stellar/wallet.ts` — Freighter API wrapper (connect, disconnect, sign, getNetwork)
-- Create `src/stellar/ipfs.ts` — Pinata/IPFS upload helper
-- Add Soroban helpers: `simulateContractCall`, `sendContractCall`, `parseContractResult`
-- Unit tests for SDK wrappers (mocked Freighter)
+#### Day 6 — Stellar SDK Wrappers ✅
+- ✅ Create `src/stellar/config.ts` — network constants
+- ✅ Create `src/stellar/contracts.ts` — typed invocation helpers for all 3 contracts
+- ✅ Create `src/stellar/wallet.ts` — Freighter API wrapper (connect, disconnect, sign, getNetwork)
+- ✅ Create `src/stellar/ipfs.ts` — Pinata/IPFS upload helper
+- ✅ Add Soroban helpers: `simulateContractCall`, `sendContractCall`, `parseContractResult`
+- ✅ Unit tests for SDK wrappers (mocked Freighter)
 
 #### Day 7 — Wallet Connect Integration
 - Build `useStellarWallet` React hook (connect, disconnect, account watcher, network check)
