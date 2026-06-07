@@ -765,21 +765,6 @@
                       "key": {
                         "vec": [
                           {
-                            "symbol": "CommanderListing"
-                          },
-                          {
-                            "u32": 1
-                          }
-                        ]
-                      },
-                      "val": {
-                        "u32": 1
-                      }
-                    },
-                    {
-                      "key": {
-                        "vec": [
-                          {
                             "symbol": "FeePercent"
                           }
                         ]

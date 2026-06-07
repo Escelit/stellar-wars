@@ -41,7 +41,87 @@
                   "u32": 1
                 },
                 {
-                  "string": "Xenon"
+                  "string": "Alpha"
+                },
+                {
+                  "vec": [
+                    {
+                      "symbol": "Aggressive"
+                    }
+                  ]
+                },
+                {
+                  "vec": [
+                    {
+                      "symbol": "Victory"
+                    }
+                  ]
+                },
+                {
+                  "i32": 99
+                },
+                {
+                  "vec": [
+                    {
+                      "u32": 80
+                    },
+                    {
+                      "u32": 70
+                    },
+                    {
+                      "u32": 60
+                    },
+                    {
+                      "u32": 50
+                    },
+                    {
+                      "u32": 90
+                    }
+                  ]
+                },
+                {
+                  "vec": [
+                    {
+                      "u32": 40
+                    },
+                    {
+                      "u32": 40
+                    },
+                    {
+                      "u32": 40
+                    },
+                    {
+                      "u32": 40
+                    },
+                    {
+                      "u32": 40
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "sub_invocations": []
+        }
+      ]
+    ],
+    [
+      [
+        "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4",
+        {
+          "function": {
+            "contract_fn": {
+              "contract_address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHK3M",
+              "function_name": "record_battle",
+              "args": [
+                {
+                  "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4"
+                },
+                {
+                  "u32": 1
+                },
+                {
+                  "string": "Beta"
                 },
                 {
                   "vec": [
@@ -82,19 +162,19 @@
                 {
                   "vec": [
                     {
-                      "u32": 60
+                      "u32": 40
                     },
                     {
-                      "u32": 60
+                      "u32": 40
                     },
                     {
-                      "u32": 60
+                      "u32": 40
                     },
                     {
-                      "u32": 60
+                      "u32": 40
                     },
                     {
-                      "u32": 60
+                      "u32": 40
                     }
                   ]
                 }
@@ -104,168 +184,7 @@
           "sub_invocations": []
         }
       ]
-    ],
-    [
-      [
-        "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4",
-        {
-          "function": {
-            "contract_fn": {
-              "contract_address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHK3M",
-              "function_name": "record_battle",
-              "args": [
-                {
-                  "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4"
-                },
-                {
-                  "u32": 1
-                },
-                {
-                  "string": "Nova"
-                },
-                {
-                  "vec": [
-                    {
-                      "symbol": "Defensive"
-                    }
-                  ]
-                },
-                {
-                  "vec": [
-                    {
-                      "symbol": "Victory"
-                    }
-                  ]
-                },
-                {
-                  "i32": 105
-                },
-                {
-                  "vec": [
-                    {
-                      "u32": 80
-                    },
-                    {
-                      "u32": 70
-                    },
-                    {
-                      "u32": 60
-                    },
-                    {
-                      "u32": 50
-                    },
-                    {
-                      "u32": 90
-                    }
-                  ]
-                },
-                {
-                  "vec": [
-                    {
-                      "u32": 70
-                    },
-                    {
-                      "u32": 70
-                    },
-                    {
-                      "u32": 70
-                    },
-                    {
-                      "u32": 70
-                    },
-                    {
-                      "u32": 70
-                    }
-                  ]
-                }
-              ]
-            }
-          },
-          "sub_invocations": []
-        }
-      ]
-    ],
-    [
-      [
-        "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4",
-        {
-          "function": {
-            "contract_fn": {
-              "contract_address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHK3M",
-              "function_name": "record_battle",
-              "args": [
-                {
-                  "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4"
-                },
-                {
-                  "u32": 1
-                },
-                {
-                  "string": "Zara"
-                },
-                {
-                  "vec": [
-                    {
-                      "symbol": "Balanced"
-                    }
-                  ]
-                },
-                {
-                  "vec": [
-                    {
-                      "symbol": "Defeat"
-                    }
-                  ]
-                },
-                {
-                  "i32": 110
-                },
-                {
-                  "vec": [
-                    {
-                      "u32": 80
-                    },
-                    {
-                      "u32": 70
-                    },
-                    {
-                      "u32": 60
-                    },
-                    {
-                      "u32": 50
-                    },
-                    {
-                      "u32": 90
-                    }
-                  ]
-                },
-                {
-                  "vec": [
-                    {
-                      "u32": 90
-                    },
-                    {
-                      "u32": 90
-                    },
-                    {
-                      "u32": 90
-                    },
-                    {
-                      "u32": 90
-                    },
-                    {
-                      "u32": 90
-                    }
-                  ]
-                }
-              ]
-            }
-          },
-          "sub_invocations": []
-        }
-      ]
-    ],
-    []
+    ]
   ],
   "ledger": {
     "protocol_version": 26,
@@ -307,26 +226,6 @@
               "key": {
                 "ledger_key_nonce": {
                   "nonce": "1033654523790656264"
-                }
-              },
-              "durability": "temporary",
-              "val": "void"
-            }
-          },
-          "ext": "v0"
-        },
-        "live_until": 6311999
-      },
-      {
-        "entry": {
-          "last_modified_ledger_seq": 0,
-          "data": {
-            "contract_data": {
-              "ext": "v0",
-              "contract": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4",
-              "key": {
-                "ledger_key_nonce": {
-                  "nonce": "4837995959683129791"
                 }
               },
               "durability": "temporary",
@@ -426,7 +325,7 @@
                               "symbol": "morale_before"
                             },
                             "val": {
-                              "i32": 100
+                              "i32": 99
                             }
                           },
                           {
@@ -434,7 +333,7 @@
                               "symbol": "opponent_name"
                             },
                             "val": {
-                              "string": "Xenon"
+                              "string": "Alpha"
                             }
                           },
                           {
@@ -444,19 +343,19 @@
                             "val": {
                               "vec": [
                                 {
-                                  "u32": 60
+                                  "u32": 40
                                 },
                                 {
-                                  "u32": 60
+                                  "u32": 40
                                 },
                                 {
-                                  "u32": 60
+                                  "u32": 40
                                 },
                                 {
-                                  "u32": 60
+                                  "u32": 40
                                 },
                                 {
-                                  "u32": 60
+                                  "u32": 40
                                 }
                               ]
                             }
@@ -570,7 +469,7 @@
                               "symbol": "morale_before"
                             },
                             "val": {
-                              "i32": 105
+                              "i32": 100
                             }
                           },
                           {
@@ -578,7 +477,7 @@
                               "symbol": "opponent_name"
                             },
                             "val": {
-                              "string": "Nova"
+                              "string": "Beta"
                             }
                           },
                           {
@@ -588,19 +487,19 @@
                             "val": {
                               "vec": [
                                 {
-                                  "u32": 70
+                                  "u32": 40
                                 },
                                 {
-                                  "u32": 70
+                                  "u32": 40
                                 },
                                 {
-                                  "u32": 70
+                                  "u32": 40
                                 },
                                 {
-                                  "u32": 70
+                                  "u32": 40
                                 },
                                 {
-                                  "u32": 70
+                                  "u32": 40
                                 }
                               ]
                             }
@@ -656,151 +555,7 @@
                             "val": {
                               "vec": [
                                 {
-                                  "symbol": "Defensive"
-                                }
-                              ]
-                            }
-                          },
-                          {
-                            "key": {
-                              "symbol": "timestamp"
-                            },
-                            "val": {
-                              "u64": "0"
-                            }
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "key": {
-                        "vec": [
-                          {
-                            "symbol": "Battle"
-                          },
-                          {
-                            "u32": 3
-                          }
-                        ]
-                      },
-                      "val": {
-                        "map": [
-                          {
-                            "key": {
-                              "symbol": "commander_id"
-                            },
-                            "val": {
-                              "u32": 1
-                            }
-                          },
-                          {
-                            "key": {
-                              "symbol": "id"
-                            },
-                            "val": {
-                              "u32": 3
-                            }
-                          },
-                          {
-                            "key": {
-                              "symbol": "morale_after"
-                            },
-                            "val": {
-                              "i32": 100
-                            }
-                          },
-                          {
-                            "key": {
-                              "symbol": "morale_before"
-                            },
-                            "val": {
-                              "i32": 110
-                            }
-                          },
-                          {
-                            "key": {
-                              "symbol": "opponent_name"
-                            },
-                            "val": {
-                              "string": "Zara"
-                            }
-                          },
-                          {
-                            "key": {
-                              "symbol": "opponent_stats"
-                            },
-                            "val": {
-                              "vec": [
-                                {
-                                  "u32": 90
-                                },
-                                {
-                                  "u32": 90
-                                },
-                                {
-                                  "u32": 90
-                                },
-                                {
-                                  "u32": 90
-                                },
-                                {
-                                  "u32": 90
-                                }
-                              ]
-                            }
-                          },
-                          {
-                            "key": {
-                              "symbol": "outcome"
-                            },
-                            "val": {
-                              "vec": [
-                                {
-                                  "symbol": "Defeat"
-                                }
-                              ]
-                            }
-                          },
-                          {
-                            "key": {
-                              "symbol": "player"
-                            },
-                            "val": {
-                              "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4"
-                            }
-                          },
-                          {
-                            "key": {
-                              "symbol": "player_stats"
-                            },
-                            "val": {
-                              "vec": [
-                                {
-                                  "u32": 80
-                                },
-                                {
-                                  "u32": 70
-                                },
-                                {
-                                  "u32": 60
-                                },
-                                {
-                                  "u32": 50
-                                },
-                                {
-                                  "u32": 90
-                                }
-                              ]
-                            }
-                          },
-                          {
-                            "key": {
-                              "symbol": "strategy"
-                            },
-                            "val": {
-                              "vec": [
-                                {
-                                  "symbol": "Balanced"
+                                  "symbol": "Aggressive"
                                 }
                               ]
                             }
@@ -834,7 +589,7 @@
                               "symbol": "losses"
                             },
                             "val": {
-                              "u32": 1
+                              "u32": 0
                             }
                           },
                           {
@@ -842,7 +597,7 @@
                               "symbol": "total_battles"
                             },
                             "val": {
-                              "u32": 3
+                              "u32": 2
                             }
                           },
                           {
@@ -865,7 +620,7 @@
                         ]
                       },
                       "val": {
-                        "u32": 4
+                        "u32": 3
                       }
                     },
                     {
@@ -898,9 +653,6 @@
                           },
                           {
                             "u32": 2
-                          },
-                          {
-                            "u32": 3
                           }
                         ]
                       }
