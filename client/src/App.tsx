@@ -1,4 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
+import WalletProvider from '@/components/WalletProvider';
 import Layout from '@/components/Layout';
 import HomePage from '@/pages/HomePage';
 import MintPage from '@/pages/MintPage';
@@ -9,15 +10,17 @@ import ProfilePage from '@/pages/ProfilePage';
 
 export default function App() {
   return (
-    <Routes>
-      <Route element={<Layout />}>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/mint" element={<MintPage />} />
-        <Route path="/game" element={<GamePage />} />
-        <Route path="/commanders" element={<CommandersPage />} />
-        <Route path="/marketplace" element={<MarketplacePage />} />
-        <Route path="/profile" element={<ProfilePage />} />
-      </Route>
-    </Routes>
+    <WalletProvider>
+      <Routes>
+        <Route element={<Layout />}>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/mint" element={<MintPage />} />
+          <Route path="/game" element={<GamePage />} />
+          <Route path="/commanders" element={<CommandersPage />} />
+          <Route path="/marketplace" element={<MarketplacePage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+        </Route>
+      </Routes>
+    </WalletProvider>
   );
 }
