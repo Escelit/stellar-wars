@@ -75,13 +75,13 @@ The README roadmap defines 12 milestones. "50% completion" means delivering the 
 - ✅ Add Soroban helpers: `simulateContractCall`, `sendContractCall`, `parseContractResult`
 - ✅ Unit tests for SDK wrappers (mocked Freighter)
 
-#### Day 7 — Wallet Connect Integration
-- Build `useStellarWallet` React hook (connect, disconnect, account watcher, network check)
-- Build `WalletProvider` context component
-- Create wallet connection UI: button, modal, status indicator
-- Wire network detection (prompt switch to testnet if on wrong network)
-- Handle edge cases: wallet not installed, connection rejected, network mismatch
-- E2E interaction: connect wallet → call `mint_commander` view function → display result
+#### Day 7 — Wallet Connect Integration ✅
+- ✅ Build `useStellarWallet` React hook (connect, disconnect, account watcher, network check)
+- ✅ Build `WalletProvider` context component
+- ✅ Create wallet connection UI: button, modal, status indicator
+- ✅ Wire network detection (prompt switch to testnet if on wrong network)
+- ✅ Handle edge cases: wallet not installed, connection rejected, network mismatch
+- ✅ E2E interaction: connect wallet → call `mint_commander` view function → display result
 
 ---
 
