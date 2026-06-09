@@ -15,6 +15,18 @@ model User {
   updatedAt     DateTime @updatedAt
 
   playthroughs Playthrough[]
+  saves        SaveGame[]
+}
+
+model NarrativeNode {
+  id        String   @id
+  chapter   Int
+  title     String
+  content   String
+  choices   String   @default("[]")
+  createdAt DateTime @default(now())
+
+  playthroughs Playthrough[]
 }
 
 model Playthrough {
@@ -27,7 +39,8 @@ model Playthrough {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  user         User     @relation(fields: [userId], references: [id])
+  user         User           @relation(fields: [userId], references: [id])
+  current      NarrativeNode? @relation(fields: [currentNode], references: [id])
   choices      Choice[]
 
   @@index([userId])
@@ -43,4 +56,19 @@ model Choice {
   playthrough   Playthrough @relation(fields: [playthroughId], references: [id])
 
   @@index([playthroughId])
+}
+
+model SaveGame {
+  id           String   @id @default(cuid())
+  userId       String
+  name         String   @default("Slot 1")
+  playthroughId String?
+  data         String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  user         User @relation(fields: [userId], references: [id])
+
+  @@unique([userId, name])
+  @@index([userId])
 }
