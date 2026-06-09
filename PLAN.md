@@ -87,13 +87,13 @@ The README roadmap defines 12 milestones. "50% completion" means delivering the 
 
 ### Week 2 — Backend, Frontend & Polish
 
-#### Day 8 — Backend: Prisma + Auth
-- Define Prisma schema: `User`, `SaveGame`, `NarrativeNode`, `Playthrough`
-- Run `prisma migrate dev`
-- Create Express app scaffold: middleware (CORS, auth, error handler), route structure
-- Implement JWT auth: `POST /auth/connect` (verify Stellar signed challenge), `GET /auth/me`
-- Add Prisma seed script with sample narrative nodes
-- Write API integration tests
+#### Day 8 — Backend: Prisma + Auth ✅
+- ✅ Define Prisma schema: `User`, `SaveGame`, `NarrativeNode`, `Playthrough`
+- ✅ Run `prisma migrate dev`
+- ✅ Create Express app scaffold: middleware (CORS, auth, error handler), route structure
+- ✅ Implement JWT auth: `POST /auth/connect` (verify Stellar signed challenge), `GET /auth/me`
+- ✅ Add Prisma seed script with sample narrative nodes
+- ✅ Write API integration tests — 11 tests passing
 
 #### Day 9 — Backend: Narrative Engine API
 - Implement narrative endpoints:
