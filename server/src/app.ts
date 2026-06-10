@@ -2,6 +2,8 @@ import express from 'express';
 import cors from 'cors';
 import { PrismaClient } from '@prisma/client';
 import authRoutes from '@/routes/auth';
+import narrativeRoutes from '@/routes/narrative';
+import savesRoutes from '@/routes/saves';
 import { errorHandler } from '@/middleware/errorHandler';
 
 export const prisma = new PrismaClient();
@@ -16,6 +18,8 @@ app.get('/api/health', (_req, res) => {
 });
 
 app.use('/api/auth', authRoutes);
+app.use('/api/narrative', narrativeRoutes);
+app.use('/api', savesRoutes);
 
 app.use((_req, res) => {
   res.status(404).json({ error: 'Not found' });

@@ -9,18 +9,22 @@ const publicKey = keypair.publicKey();
 
 beforeAll(async () => {
   await prisma.$connect();
-  await prisma.narrativeNode.create({
-    data: {
-      id: 'test-node-1',
+  await prisma.narrativeNode.upsert({
+    where: { id: 'auth-test-node-1' },
+    update: {},
+    create: {
+      id: 'auth-test-node-1',
       chapter: 1,
       title: 'Test Node',
       content: 'Test content',
-      choices: JSON.stringify([{ text: 'Continue', nextNodeId: 'test-node-2' }]),
+      choices: JSON.stringify([{ text: 'Continue', nextNodeId: 'auth-test-node-2' }]),
     },
   });
-  await prisma.narrativeNode.create({
-    data: {
-      id: 'test-node-2',
+  await prisma.narrativeNode.upsert({
+    where: { id: 'auth-test-node-2' },
+    update: {},
+    create: {
+      id: 'auth-test-node-2',
       chapter: 1,
       title: 'Test Node 2',
       content: 'Test content 2',
@@ -30,11 +34,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await prisma.choice.deleteMany();
-  await prisma.playthrough.deleteMany();
-  await prisma.saveGame.deleteMany();
-  await prisma.narrativeNode.deleteMany();
-  await prisma.user.deleteMany();
+  await prisma.narrativeNode.deleteMany({ where: { id: { startsWith: 'auth-test-' } } });
   await prisma.$disconnect();
 });
 
@@ -166,8 +166,8 @@ describe('GET /api/auth/me with pre-generated token', () => {
 });
 
 describe('Narrative nodes seed', () => {
-  it('has seeded narrative nodes from beforeAll', async () => {
-    const nodes = await prisma.narrativeNode.findMany();
+  it('has seeded auth test narrative nodes from beforeAll', async () => {
+    const nodes = await prisma.narrativeNode.findMany({ where: { id: { startsWith: 'auth-test-' } } });
     expect(nodes.length).toBeGreaterThanOrEqual(2);
   });
 });
