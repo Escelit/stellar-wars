@@ -166,7 +166,7 @@ export const contractActions = {
         nativeToScVal(name, { type: 'string' }),
         nativeToScVal(rarity, { type: 'u32' }), // Enums are u32
         nativeToScVal(faction, { type: 'string' }),
-        nativeToScVal(stats, { type: 'vec', children: { type: 'u32' } }),
+        nativeToScVal(stats),
       ],
     };
   },
@@ -191,8 +191,8 @@ export const contractActions = {
         nativeToScVal(strategy, { type: 'u32' }),
         nativeToScVal(outcome, { type: 'u32' }),
         nativeToScVal(moraleBefore, { type: 'i32' }),
-        nativeToScVal(playerStats, { type: 'vec', children: { type: 'u32' } }),
-        nativeToScVal(opponentStats, { type: 'vec', children: { type: 'u32' } }),
+        nativeToScVal(playerStats),
+        nativeToScVal(opponentStats),
       ],
     };
   },

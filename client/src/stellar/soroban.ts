@@ -5,6 +5,7 @@ import {
   scValToNative,
   xdr,
   Transaction,
+  Operation,
 } from '@stellar/stellar-sdk';
 import { SOROBAN_RPC_URL, NETWORK_PASSPHRASE } from './config';
 
@@ -33,20 +34,16 @@ export async function simulateContractCall({
     networkPassphrase: NETWORK_PASSPHRASE.TESTNET,
   })
     .addOperation(
-      xdr.Operation.body(
-        xdr.OperationBody.invokeHostFunction(
-          new xdr.InvokeHostFunctionOp({
-            hostFunction: xdr.HostFunction.hostFunctionTypeInvokeContract(
-              new xdr.InvokeContractArgs({
-                contractAddress: Address.fromString(contractId).toScAddress(),
-                functionName: method,
-                args: args,
-              })
-            ),
-            auth: [],
+      Operation.invokeHostFunction({
+        func: xdr.HostFunction.hostFunctionTypeInvokeContract(
+          new xdr.InvokeContractArgs({
+            contractAddress: Address.fromString(contractId).toScAddress(),
+            functionName: method,
+            args: args,
           })
-        )
-      )
+        ),
+        auth: [],
+      })
     )
     .setTimeout(30)
     .build();
@@ -91,17 +88,17 @@ export async function sendContractCall(signedXdr: string) {
   }
 
   // Poll for result
-  let status = response.status;
+  let status: string = response.status;
   let result;
   
-  while (status === 'PENDING') {
+  while (status === 'PENDING' || (result && result.status === rpc.Api.GetTransactionStatus.NOT_FOUND)) {
     await new Promise((resolve) => setTimeout(resolve, 2000));
     result = await rpcServer.getTransaction(response.hash);
     status = result.status;
   }
 
-  if (status !== 'SUCCESS') {
-    throw new Error(`Transaction failed with status: ${status}`);
+  if (result && result.status !== rpc.Api.GetTransactionStatus.SUCCESS) {
+    throw new Error(`Transaction failed with status: ${result.status}`);
   }
 
   return result;
@@ -111,7 +108,7 @@ export async function sendContractCall(signedXdr: string) {
  * Parses the result of a contract call into a native JavaScript value
  */
 export function parseContractResult(result: rpc.Api.GetTransactionResponse) {
-  if (result.status !== 'SUCCESS' || !result.returnValue) {
+  if (result.status !== rpc.Api.GetTransactionStatus.SUCCESS || !result.returnValue) {
     return null;
   }
   return scValToNative(result.returnValue);

@@ -1,6 +1,6 @@
 import {
   isConnected,
-  getPublicKey,
+  getAddress,
   signTransaction,
   getNetwork,
 } from '@stellar/freighter-api';
@@ -10,7 +10,8 @@ export const wallet = {
    * Check if Freighter is installed and connected
    */
   async isAvailable(): Promise<boolean> {
-    return isConnected();
+    const result = await isConnected();
+    return !!result.isConnected;
   },
 
   /**
@@ -18,10 +19,12 @@ export const wallet = {
    */
   async getAddress(): Promise<string | null> {
     try {
-      if (!(await isConnected())) {
+      const connected = await isConnected();
+      if (!connected.isConnected) {
         return null;
       }
-      return await getPublicKey();
+      const result = await getAddress();
+      return result.address || null;
     } catch (e) {
       console.error('Failed to get Freighter public key:', e);
       return null;
@@ -33,7 +36,8 @@ export const wallet = {
    */
   async getNetwork(): Promise<string | null> {
     try {
-      return await getNetwork();
+      const result = await getNetwork();
+      return result.networkPassphrase || null;
     } catch (e) {
       console.error('Failed to get Freighter network:', e);
       return null;
@@ -45,7 +49,10 @@ export const wallet = {
    */
   async sign(xdr: string, network: string): Promise<string | null> {
     try {
-      return await signTransaction(xdr, { network });
+      const result = await signTransaction(xdr, { 
+        networkPassphrase: network 
+      });
+      return result.signedTxXdr || null;
     } catch (e) {
       console.error('Failed to sign transaction with Freighter:', e);
       return null;

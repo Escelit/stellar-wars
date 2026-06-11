@@ -63,6 +63,7 @@ The README roadmap defines 12 milestones. "50% completion" means delivering the 
 - Audit contract code: access control, overflow safety, edge cases
 - Write integration tests (cross-contract scenarios)
 - Create `scripts/deploy-contracts.sh` with idempotent deployment
+
 - Deploy all 3 contracts to Stellar Testnet
 - Capture deployed addresses, update `.env.example`
 - Add `contracts:test` and `contracts:deploy` npm scripts
