@@ -87,21 +87,23 @@ export async function sendContractCall(signedXdr: string) {
     throw new Error(`Transaction submission failed: ${response.status}`);
   }
 
+  const txHash = response.hash;
+
   // Poll for result
   let status: string = response.status;
-  let result;
+  let txResult;
   
-  while (status === 'PENDING' || (result && result.status === rpc.Api.GetTransactionStatus.NOT_FOUND)) {
+  while (status === 'PENDING' || (txResult && txResult.status === rpc.Api.GetTransactionStatus.NOT_FOUND)) {
     await new Promise((resolve) => setTimeout(resolve, 2000));
-    result = await rpcServer.getTransaction(response.hash);
-    status = result.status;
+    txResult = await rpcServer.getTransaction(txHash);
+    status = txResult.status;
   }
 
-  if (result && result.status !== rpc.Api.GetTransactionStatus.SUCCESS) {
-    throw new Error(`Transaction failed with status: ${result.status}`);
+  if (txResult && txResult.status !== rpc.Api.GetTransactionStatus.SUCCESS) {
+    throw new Error(`Transaction failed with status: ${txResult.status}`);
   }
 
-  return result;
+  return { hash: txHash, result: txResult };
 }
 
 /**
