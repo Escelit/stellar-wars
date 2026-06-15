@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import rateLimit from 'express-rate-limit';
 import { PrismaClient } from '@prisma/client';
 import authRoutes from '@/routes/auth';
 import narrativeRoutes from '@/routes/narrative';
@@ -12,7 +13,17 @@ export const prisma = new PrismaClient();
 const app = express();
 
 app.use(cors({ origin: process.env.CLIENT_URL ?? 'http://localhost:3000' }));
-app.use(express.json());
+app.use(express.json({ limit: '10kb' }));
+
+const apiLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Too many requests, please try again later' },
+});
+
+app.use('/api', apiLimiter);
 
 app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });

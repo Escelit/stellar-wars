@@ -7,6 +7,7 @@ export const ipfs = {
   /**
    * Upload JSON metadata to IPFS via Pinata
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- metadata is user-supplied JSON
   async uploadMetadata(metadata: any): Promise<string> {
     if (!PINATA_API_KEY || !PINATA_SECRET_KEY) {
       throw new Error('Pinata API keys not configured');
@@ -47,7 +48,7 @@ export const ipfs = {
         formData,
         {
           headers: {
-            'Content-Type': `multipart/form-data; boundary=${(formData as any)._boundary}`,
+            'Content-Type': `multipart/form-data; boundary=${(formData as unknown as { _boundary: string })._boundary}`,
             pinata_api_key: PINATA_API_KEY,
             pinata_secret_api_key: PINATA_SECRET_KEY,
           },

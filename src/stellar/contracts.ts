@@ -1,6 +1,11 @@
-import { nativeToScVal, xdr } from '@stellar/stellar-sdk';
+import { nativeToScVal } from '@stellar/stellar-sdk';
+import type { rpc } from '@stellar/stellar-sdk';
 import { CONTRACT_IDS } from './config';
 import { simulateContractCall, parseContractResult } from './soroban';
+
+function parseSimulationResult(result: rpc.Api.SimulateTransactionResponse, _context: string) {
+  return parseContractResult(result as unknown as rpc.Api.GetTransactionResponse);
+}
 
 // --- Types ---
 
@@ -76,7 +81,7 @@ export const mintController = {
       args: [nativeToScVal(commanderId, { type: 'u32' })],
       source: CONTRACT_IDS.MINT_CONTROLLER, // Use contract ID as source for read-only if no wallet
     });
-    return parseContractResult(result as any) as Commander | null;
+    return parseSimulationResult(result, 'getCommander') as Commander | null;
   },
 
   async getOwnedCommanders(owner: string): Promise<Commander[]> {
@@ -86,7 +91,7 @@ export const mintController = {
       args: [nativeToScVal(owner, { type: 'address' })],
       source: owner,
     });
-    return (parseContractResult(result as any) as Commander[]) || [];
+    return (parseSimulationResult(result, 'getOwnedCommanders') as Commander[]) || [];
   },
 };
 
@@ -98,7 +103,7 @@ export const battleRegistry = {
       args: [nativeToScVal(battleId, { type: 'u32' })],
       source: CONTRACT_IDS.BATTLE_REGISTRY,
     });
-    return parseContractResult(result as any) as BattleRecord | null;
+    return parseSimulationResult(result, 'getBattle') as BattleRecord | null;
   },
 
   async getPlayerBattles(player: string): Promise<BattleRecord[]> {
@@ -108,7 +113,7 @@ export const battleRegistry = {
       args: [nativeToScVal(player, { type: 'address' })],
       source: player,
     });
-    return (parseContractResult(result as any) as BattleRecord[]) || [];
+    return (parseSimulationResult(result, 'getPlayerBattles') as BattleRecord[]) || [];
   },
 
   async getCommanderStats(commanderId: number): Promise<CommanderStats | null> {
@@ -118,7 +123,7 @@ export const battleRegistry = {
       args: [nativeToScVal(commanderId, { type: 'u32' })],
       source: CONTRACT_IDS.BATTLE_REGISTRY,
     });
-    return parseContractResult(result as any) as CommanderStats | null;
+    return parseSimulationResult(result, 'getCommanderStats') as CommanderStats | null;
   },
 };
 
@@ -130,7 +135,7 @@ export const marketplace = {
       args: [nativeToScVal(listingId, { type: 'u32' })],
       source: CONTRACT_IDS.MARKETPLACE,
     });
-    return parseContractResult(result as any) as Listing | null;
+    return parseSimulationResult(result, 'getListing') as Listing | null;
   },
 
   async getCommanderListing(commanderId: number): Promise<Listing | null> {
@@ -140,7 +145,7 @@ export const marketplace = {
       args: [nativeToScVal(commanderId, { type: 'u32' })],
       source: CONTRACT_IDS.MARKETPLACE,
     });
-    return parseContractResult(result as any) as Listing | null;
+    return parseSimulationResult(result, 'getListing') as Listing | null;
   },
 
   async getSellerListings(seller: string): Promise<Listing[]> {
@@ -150,7 +155,7 @@ export const marketplace = {
       args: [nativeToScVal(seller, { type: 'address' })],
       source: seller,
     });
-    return (parseContractResult(result as any) as Listing[]) || [];
+    return (parseSimulationResult(result, 'getSellerListings') as Listing[]) || [];
   },
 };
 
