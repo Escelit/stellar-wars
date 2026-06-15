@@ -1,0 +1,61 @@
+name: Deploy Contracts
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "contracts/**"
+      - "scripts/deploy-contracts.sh"
+      - ".github/workflows/deploy.yml"
+
+env:
+  NODE_VERSION: "20"
+  RUST_VERSION: "1.81"
+
+jobs:
+  test-and-deploy:
+    name: Test & Deploy to Testnet
+    runs-on: ubuntu-latest
+    environment: testnet
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          toolchain: ${{ env.RUST_VERSION }}
+          target: wasm32-unknown-unknown
+
+      - name: Cache Cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            contracts/target/
+            ~/.cargo/registry/
+            ~/.cargo/git/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('contracts/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
+      - name: Run Contract Tests
+        run: cargo test
+        working-directory: contracts
+
+      - name: Install Stellar CLI
+        run: |
+          curl -fsSL https://deb.parrotsec.org/parrot/parrot.key | sudo apt-key add - || true
+          # Install stellar CLI via cargo
+          cargo install --locked stellar-cli
+
+      - name: Build WASM
+        run: cargo build --target wasm32-unknown-unknown --release
+        working-directory: contracts
+
+      - name: Deploy to Testnet
+        run: bash scripts/deploy-contracts.sh
+        env:
+          STELLAR_NETWORK: testnet
+          STELLAR_HORIZON_URL: ${{ vars.STELLAR_HORIZON_URL }}
+          SOROBAN_RPC_URL: ${{ vars.SOROBAN_RPC_URL }}
+          ISSUER_SECRET_KEY: ${{ secrets.ISSUER_SECRET_KEY }}
+          ISSUER_PUBLIC_KEY: ${{ vars.ISSUER_PUBLIC_KEY }}

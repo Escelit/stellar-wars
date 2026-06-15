@@ -1,0 +1,23 @@
+# Each line is a file pattern followed by one or more owners
+# Order matters: the last matching pattern takes precedence
+
+# Global owners
+* @Escelit
+
+# Smart contracts
+/contracts/ @Escelit
+
+# Backend
+/server/ @Escelit
+
+# Frontend
+/client/ @Escelit
+
+# Documentation
+*.md @Escelit
+
+# CI/CD
+.github/ @Escelit
+
+# Scripts
+/scripts/ @Escelit
