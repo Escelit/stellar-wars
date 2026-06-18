@@ -557,11 +557,12 @@ We use [Conventional Commits](https://www.conventionalcommits.org/) for all comm
 - [x] Project scaffolding & Stellar SDK integration
 - [x] Soroban smart contract architecture (MintController, BattleRegistry, Marketplace)
 - [x] Freighter wallet connection
+- [x] Narrative engine (API + hooks + pages)
+- [x] NFT minting UI (page + hooks)
+- [x] Marketplace UI (page + components)
 - [ ] Deploy contracts to testnet
-- [ ] NFT minting UI
-- [ ] Narrative engine with branching story graph
+- [ ] Populate narrative story content
 - [ ] Battle resolution system connected to BattleRegistry
-- [ ] Marketplace UI
 - [ ] Multiplayer campaign mode
 - [ ] Mobile-responsive UI
 - [ ] Mainnet launch
