@@ -82,8 +82,7 @@ bold "[1/7] Server Health Check"
 check "Health endpoint" "$SERVER_URL/api/health" "200"
 
 bold "[2/7] API Auth Flow"
-check_post "Auth challenge" "$SERVER_URL/api/auth/challenge" \
-  '{"publicKey":"GA7QH4JZ5X2QY5J6X7K8L9M0N1P2Q3R4S5T6U7V8W9X0Y1Z2A3B4C5D6E7F"}' "200"
+check "Auth challenge" "$SERVER_URL/api/auth/challenge?publicKey=GA7QH4JZ5X2QY5J6X7K8L9M0N1P2Q3R4S5T6U7V8W9X0Y1Z2A3B4C5D6E7F" "200"
 check "Protected route without auth" "$SERVER_URL/api/auth/me" "401"
 
 bold "[3/7] Narrative Endpoints"
@@ -103,7 +102,7 @@ if cors=$(curl -s -o /dev/null -w "%{http_code}" --max-time 5 \
   -X OPTIONS "$SERVER_URL/api/health" \
   -H "Origin: $CLIENT_URL" \
   -H "Access-Control-Request-Method: GET" 2>/dev/null); then
-  if [ "$cors"" != "204" ] && [ "$cors" != "200" ]; then
+  if [ "$cors" != "204" ] && [ "$cors" != "200" ]; then
     red "  ✗ CORS preflight — got HTTP $cors (expected 204 or 200)"
     FAIL=$((FAIL + 1))
   else

@@ -17,19 +17,7 @@ fi
 
 WASM_DIR="$ROOT_DIR/contracts/target/wasm32-unknown-unknown/release"
 
-build_if_missing() {
-  local contract_name="$1"
-  local wasm_path="$WASM_DIR/${contract_name}.wasm"
-
-  if [ ! -f "$wasm_path" ]; then
-    echo "  -> WASM not found for $contract_name, building contracts..."
-    (cd "$ROOT_DIR/contracts" && cargo build --target wasm32-unknown-unknown --release 2>&1)
-    echo ""
-    break
-  fi
-}
-
-# Need a single pass to check all, then build once if any missing
+# Check all contracts first, then build once if any missing
 all_exist=true
 for name in mint_controller battle_registry marketplace; do
   if [ ! -f "$WASM_DIR/${name}.wasm" ]; then
