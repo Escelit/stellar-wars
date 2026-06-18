@@ -49,6 +49,7 @@ This file provides context for AI coding assistants working on this project.
 - `scripts/` — deployment and utility scripts
 - `src/stellar/` — shared Stellar SDK wrappers (root copy)
 - `docs/` — ARCHITECTURE.md, SETUP.md
+- `narrative/` — story nodes and faction data
 - `.github/` — CI workflows, issue templates, CODEOWNERS, Dependabot
 
 ## Code Quality Rules
