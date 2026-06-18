@@ -10,7 +10,7 @@ on:
 
 env:
   NODE_VERSION: "20"
-  RUST_VERSION: "1.91"
+  RUST_VERSION: "1.93"
 
 jobs:
   test-and-deploy:
@@ -42,10 +42,7 @@ jobs:
         working-directory: contracts
 
       - name: Install Stellar CLI
-        run: |
-          curl -fsSL https://deb.parrotsec.org/parrot/parrot.key | sudo apt-key add - || true
-          # Install stellar CLI via cargo
-          cargo install --locked stellar-cli
+        run: cargo install --locked stellar-cli
 
       - name: Build WASM
         run: cargo build --target wasm32-unknown-unknown --release
