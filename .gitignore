@@ -4,6 +4,7 @@ build/
 .env
 *.wasm
 contracts/target/
+contracts/Cargo.lock
 .prisma/
 *.log
 .DS_Store
