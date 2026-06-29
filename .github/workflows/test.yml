@@ -93,7 +93,7 @@ jobs:
           target: wasm32-unknown-unknown
 
       - name: Cache Cargo
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             contracts/target/
