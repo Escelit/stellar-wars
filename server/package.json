@@ -15,7 +15,7 @@
     "db:generate": "prisma generate"
   },
   "dependencies": {
-    "@prisma/client": "^5.14.0",
+    "@prisma/client": "^7.9.0",
     "@stellar/stellar-sdk": "^15.1.0",
     "cors": "^2.8.5",
     "express": "^4.19.0",
