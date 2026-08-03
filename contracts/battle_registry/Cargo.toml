@@ -7,7 +7,7 @@ edition.workspace = true
 crate-type = ["cdylib", "lib"]
 
 [dependencies]
-soroban-sdk = { version = "26.0.1", features = ["testutils"] }
+soroban-sdk = { version = "27.0.3", features = ["testutils"] }
 
 [dev-dependencies]
-soroban-sdk = { version = "26.0.1", features = ["testutils"] }
+soroban-sdk = { version = "27.0.3", features = ["testutils"] }
