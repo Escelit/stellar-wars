@@ -1,9 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import WalletProvider from '@/components/WalletProvider';
-import Layout from '@/components/Layout';
-import ProtectedRoute from '@/components/ProtectedRoute';
-import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import { Layout, ProtectedRoute, WalletProvider } from '@/components';
+import { LoadingSpinner } from '@/components/ui';
 
 const HomePage = lazy(() => import('@/pages/HomePage'));
 const MintPage = lazy(() => import('@/pages/MintPage'));

@@ -56,7 +56,7 @@ export interface BattleRecord {
   opponent_stats: number[];
 }
 
-export interface CommanderStats {
+export interface BattleStats {
   total_battles: number;
   wins: number;
   losses: number;
@@ -116,14 +116,14 @@ export const battleRegistry = {
     return (parseSimulationResult(result, 'getPlayerBattles') as BattleRecord[]) || [];
   },
 
-  async getCommanderStats(commanderId: number): Promise<CommanderStats | null> {
+  async getCommanderStats(commanderId: number): Promise<BattleStats | null> {
     const result = await simulateContractCall({
       contractId: CONTRACT_IDS.BATTLE_REGISTRY,
       method: 'get_commander_stats',
       args: [nativeToScVal(commanderId, { type: 'u32' })],
       source: CONTRACT_IDS.BATTLE_REGISTRY,
     });
-    return parseSimulationResult(result, 'getCommanderStats') as CommanderStats | null;
+    return parseSimulationResult(result, 'getCommanderStats') as BattleStats | null;
   },
 };
 
