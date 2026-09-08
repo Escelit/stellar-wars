@@ -22,15 +22,10 @@ export default function WalletProvider({ children }: { children: ReactNode }) {
 
   const checkNetwork = useCallback(async () => {
     try {
-      const networkResult = await wallet.getNetwork();
-      const passphrase = networkResult
-        ? typeof networkResult === 'string'
-          ? networkResult
-          : (networkResult as unknown as { networkPassphrase: string }).networkPassphrase
-        : null;
+      const passphrase = await wallet.getNetwork();
       setIsCorrectNetwork(passphrase === NETWORK_PASSPHRASE.TESTNET);
     } catch {
-      setIsCorrectNetwork(true);
+      setIsCorrectNetwork(false);
     }
   }, []);
 
@@ -67,16 +62,26 @@ export default function WalletProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
-    wallet.isAvailable().then((available) => {
-      if (available) {
-        wallet.getAddress().then((addr) => {
-          if (addr) {
-            setAddress(addr);
-            checkNetwork();
-          }
-        });
+    let cancelled = false;
+
+    (async () => {
+      try {
+        const available = await wallet.isAvailable();
+        if (!available || cancelled) return;
+
+        const addr = await wallet.getAddress();
+        if (addr && !cancelled) {
+          setAddress(addr);
+          void checkNetwork();
+        }
+      } catch {
+        // Auto-reconnect is best-effort; surface nothing until the user connects manually.
       }
-    });
+    })();
+
+    return () => {
+      cancelled = true;
+    };
   }, [checkNetwork]);
 
   useEffect(() => {

@@ -26,6 +26,7 @@ export default function GamePage() {
     isSaving,
     isLoadingSave,
     authError,
+    narrativeError,
     authenticate,
     selectCommander,
     makeChoice,
@@ -163,6 +164,12 @@ export default function GamePage() {
         </div>
 
         <div className="space-y-6 lg:col-span-3">
+          {narrativeError && (
+            <div className="rounded-lg border border-imperial-500 bg-imperial-600/20 p-3 text-sm text-imperial-300">
+              {narrativeError}
+            </div>
+          )}
+
           {currentNode && (
             <>
               <Card>

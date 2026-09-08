@@ -37,6 +37,12 @@ export interface NarrativeState {
   isSaving: boolean;
   isLoadingSave: boolean;
   authError: string | null;
+  narrativeError: string | null;
+}
+
+function toErrorMessage(e: unknown): string {
+  if (e instanceof Error && e.message) return e.message;
+  return 'An unexpected error occurred';
 }
 
 export function useNarrative() {
@@ -57,6 +63,7 @@ export function useNarrative() {
     isSaving: false,
     isLoadingSave: false,
     authError: null,
+    narrativeError: null,
   });
 
   const setPartial = useCallback((partial: Partial<NarrativeState>) => {
@@ -90,9 +97,9 @@ export function useNarrative() {
     if (!address) return;
     try {
       const commanders = await mintController.getOwnedCommanders(address);
-      setPartial({ commanders: commanders || [] });
-    } catch {
-      setPartial({ commanders: [] });
+      setPartial({ commanders: commanders || [], narrativeError: null });
+    } catch (e) {
+      setPartial({ commanders: [], narrativeError: `Failed to load commanders: ${toErrorMessage(e)}` });
     }
   }, [address, setPartial]);
 
@@ -109,7 +116,7 @@ export function useNarrative() {
           const currentId = existingPlaythroughs.playthroughs[0]!.currentNode;
           if (currentId) {
             const node = await fetchNode(currentId);
-            setPartial({ playthroughId, currentNode: node, isLoadingNode: false, phase: 'playing' });
+            setPartial({ playthroughId, currentNode: node, isLoadingNode: false, phase: 'playing', narrativeError: null });
             return;
           }
         }
@@ -118,9 +125,9 @@ export function useNarrative() {
         playthroughId = created.id;
 
         const node = await fetchNode(created.currentNode);
-        setPartial({ playthroughId, currentNode: node, isLoadingNode: false, phase: 'playing' });
+        setPartial({ playthroughId, currentNode: node, isLoadingNode: false, phase: 'playing', narrativeError: null });
       } catch (e) {
-        setPartial({ isLoadingNode: false });
+        setPartial({ isLoadingNode: false, narrativeError: `Failed to start game: ${toErrorMessage(e)}` });
       }
     },
     [setPartial]
@@ -161,16 +168,18 @@ export function useNarrative() {
             isMakingChoice: false,
             currentNode: nextNode,
             selectedCommander: currentCommander,
+            narrativeError: null,
           });
         } else {
           setPartial({
             currentNode: nextNode,
             lastChoice: chosenChoice,
             isMakingChoice: false,
+            narrativeError: null,
           });
         }
       } catch (e) {
-        setPartial({ isMakingChoice: false });
+        setPartial({ isMakingChoice: false, narrativeError: toErrorMessage(e) });
       }
     },
     [state.playthroughId, state.currentNode, state.isMakingChoice, state.selectedCommander, setPartial]
@@ -183,9 +192,9 @@ export function useNarrative() {
   const openSaveLoad = useCallback(async () => {
     try {
       const saves = await listSaves();
-      setPartial({ saves: saves.saves, phase: 'save-load' });
-    } catch {
-      setPartial({ saves: [], phase: 'save-load' });
+      setPartial({ saves: saves.saves, phase: 'save-load', narrativeError: null });
+    } catch (e) {
+      setPartial({ saves: [], phase: 'save-load', narrativeError: `Failed to load saves: ${toErrorMessage(e)}` });
     }
   }, [setPartial]);
 
@@ -207,9 +216,9 @@ export function useNarrative() {
 
         await saveGame(state.playthroughId, name, saveData);
         const saves = await listSaves();
-        setPartial({ saves: saves.saves, isSaving: false });
-      } catch {
-        setPartial({ isSaving: false });
+        setPartial({ saves: saves.saves, isSaving: false, narrativeError: null });
+      } catch (e) {
+        setPartial({ isSaving: false, narrativeError: `Failed to save game: ${toErrorMessage(e)}` });
       }
     },
     [state.playthroughId, state.currentNode, state.selectedCommander, setPartial]
@@ -221,7 +230,10 @@ export function useNarrative() {
 
       try {
         const loaded = await loadSave(save.playthroughId);
-        const saveData = JSON.parse(loaded.data);
+        const saveData: { currentNode?: string } = JSON.parse(loaded.data);
+        if (!saveData.currentNode) {
+          throw new Error('Save data is missing a node reference');
+        }
         const node = await fetchNode(saveData.currentNode);
 
         setPartial({
@@ -229,9 +241,10 @@ export function useNarrative() {
           playthroughId: save.playthroughId,
           phase: 'playing',
           isLoadingSave: false,
+          narrativeError: null,
         });
-      } catch {
-        setPartial({ isLoadingSave: false });
+      } catch (e) {
+        setPartial({ isLoadingSave: false, narrativeError: `Failed to load game: ${toErrorMessage(e)}` });
       }
     },
     [setPartial]

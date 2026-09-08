@@ -16,9 +16,13 @@ export default function HomePage() {
       return;
     }
 
-    mintController.getOwnedCommanders(address).then((commanders) => {
-      setCommanderCount(commanders.length);
-    });
+    mintController.getOwnedCommanders(address)
+      .then((commanders) => {
+        setCommanderCount(commanders.length);
+      })
+      .catch(() => {
+        setCommanderCount(0);
+      });
   }, [address]);
 
   return (

@@ -11,6 +11,11 @@ import { SOROBAN_RPC_URL, NETWORK_PASSPHRASE } from './config';
 
 const rpcServer = new rpc.Server(SOROBAN_RPC_URL.TESTNET);
 
+const DEFAULT_FEE = '100';
+const SIMULATION_TIMEOUT = 30;
+const POLL_INTERVAL_MS = 2000;
+const POLL_MAX_ATTEMPTS = 20;
+
 export interface ContractCallParams {
   contractId: string;
   method: string;
@@ -30,7 +35,7 @@ export async function simulateContractCall({
   const account = await rpcServer.getAccount(source);
   
   const tx = new TransactionBuilder(account, {
-    fee: '100',
+    fee: DEFAULT_FEE,
     networkPassphrase: NETWORK_PASSPHRASE.TESTNET,
   })
     .addOperation(
@@ -45,7 +50,7 @@ export async function simulateContractCall({
         auth: [],
       })
     )
-    .setTimeout(30)
+    .setTimeout(SIMULATION_TIMEOUT)
     .build();
 
   const simulation = await rpcServer.simulateTransaction(tx);
@@ -67,17 +72,21 @@ export async function buildTransaction(
   const account = await rpcServer.getAccount(source);
   return rpc.assembleTransaction(
     new TransactionBuilder(account, {
-      fee: '100',
+      fee: DEFAULT_FEE,
       networkPassphrase: NETWORK_PASSPHRASE.TESTNET,
     })
-      .setTimeout(30)
+      .setTimeout(SIMULATION_TIMEOUT)
       .build(),
     simulation
   ).build();
 }
 
 /**
- * Sends a signed transaction and waits for it to be included in a ledger
+ * Sends a signed transaction and waits for it to be included in a ledger.
+ *
+ * Polling is bounded by POLL_MAX_ATTEMPTS so a transaction that is stuck in
+ * PENDING/NOT_FOUND forever fails with a clear error instead of hanging the
+ * caller indefinitely.
  */
 export async function sendContractCall(signedXdr: string) {
   const tx = new Transaction(signedXdr, NETWORK_PASSPHRASE.TESTNET);
@@ -89,18 +98,26 @@ export async function sendContractCall(signedXdr: string) {
 
   const txHash = response.hash;
 
-  // Poll for result
-  let status: string = response.status;
-  let txResult;
-  
-  while (status === 'PENDING' || (txResult && txResult.status === rpc.Api.GetTransactionStatus.NOT_FOUND)) {
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+  let txResult: rpc.Api.GetTransactionResponse | null = null;
+  let attempts = 0;
+
+  while (attempts < POLL_MAX_ATTEMPTS) {
+    await new Promise((resolve) => setTimeout(resolve, POLL_INTERVAL_MS));
     txResult = await rpcServer.getTransaction(txHash);
-    status = txResult.status;
+    attempts += 1;
+
+    if (txResult.status === rpc.Api.GetTransactionStatus.SUCCESS) {
+      break;
+    }
+    if (txResult.status === rpc.Api.GetTransactionStatus.FAILED) {
+      throw new Error(`Transaction failed with status: ${txResult.status}`);
+    }
   }
 
-  if (txResult && txResult.status !== rpc.Api.GetTransactionStatus.SUCCESS) {
-    throw new Error(`Transaction failed with status: ${txResult.status}`);
+  if (!txResult || txResult.status !== rpc.Api.GetTransactionStatus.SUCCESS) {
+    throw new Error(
+      `Timed out waiting for transaction ${txHash} to be confirmed within ${POLL_MAX_ATTEMPTS} polls (${POLL_INTERVAL_MS}ms interval)`
+    );
   }
 
   return { hash: txHash, result: txResult };
