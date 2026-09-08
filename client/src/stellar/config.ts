@@ -17,11 +17,11 @@ export const SOROBAN_RPC_URL = {
   MAINNET: 'https://soroban-rpc.stellar.org',
 };
 
-// Contract IDs should be updated after deployment
+// Contract IDs should be updated after deployment and exposed as VITE_* env vars
 export const CONTRACT_IDS = {
-  MINT_CONTROLLER: process.env.MINT_CONTROLLER_CONTRACT || '',
-  BATTLE_REGISTRY: process.env.BATTLE_REGISTRY_CONTRACT || '',
-  MARKETPLACE: process.env.MARKETPLACE_CONTRACT || '',
+  MINT_CONTROLLER: import.meta.env.VITE_MINT_CONTROLLER_CONTRACT || '',
+  BATTLE_REGISTRY: import.meta.env.VITE_BATTLE_REGISTRY_CONTRACT || '',
+  MARKETPLACE: import.meta.env.VITE_MARKETPLACE_CONTRACT || '',
 };
 
 export const DEFAULT_NETWORK = 'TESTNET';

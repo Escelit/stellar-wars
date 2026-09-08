@@ -1,14 +1,13 @@
 import axios from 'axios';
 
-const PINATA_API_KEY = process.env.PINATA_API_KEY;
-const PINATA_SECRET_KEY = process.env.PINATA_SECRET_KEY;
+const PINATA_API_KEY = import.meta.env.VITE_PINATA_API_KEY;
+const PINATA_SECRET_KEY = import.meta.env.VITE_PINATA_SECRET_KEY;
 
 export const ipfs = {
   /**
    * Upload JSON metadata to IPFS via Pinata
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- metadata is user-supplied JSON
-  async uploadMetadata(metadata: any): Promise<string> {
+  async uploadMetadata(metadata: Record<string, unknown>): Promise<string> {
     if (!PINATA_API_KEY || !PINATA_SECRET_KEY) {
       throw new Error('Pinata API keys not configured');
     }
@@ -43,12 +42,12 @@ export const ipfs = {
     formData.append('file', file);
 
     try {
+      // Let axios set the multipart Content-Type boundary automatically
       const response = await axios.post(
         'https://api.pinata.cloud/pinning/pinFileToIPFS',
         formData,
         {
           headers: {
-            'Content-Type': `multipart/form-data; boundary=${(formData as unknown as { _boundary: string })._boundary}`,
             pinata_api_key: PINATA_API_KEY,
             pinata_secret_api_key: PINATA_SECRET_KEY,
           },
