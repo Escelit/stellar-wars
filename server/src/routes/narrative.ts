@@ -2,9 +2,31 @@ import { Router } from 'express';
 import { prisma } from '@/app';
 import { requireAuth } from '@/middleware/auth';
 import { AppError, asyncHandler } from '@/middleware/errorHandler';
-import type { Choice, ChooseBody } from '@/types/narrative';
+import type { Choice, ChooseBody, CommanderStats } from '@/types/narrative';
 
 const router = Router();
+
+const STAT_KEYS: ReadonlyArray<keyof CommanderStats> = [
+  'attack',
+  'defense',
+  'strategy',
+  'influence',
+  'morale',
+];
+
+function parseChoices(raw: string): Choice[] {
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    throw new AppError(500, 'Stored narrative data is corrupted');
+  }
+
+  if (!Array.isArray(parsed)) {
+    throw new AppError(500, 'Stored narrative data has invalid choices');
+  }
+  return parsed as Choice[];
+}
 
 /**
  * GET /api/narrative/node/:id
@@ -25,7 +47,7 @@ router.get(
       throw new AppError(404, `Narrative node '${id}' not found`);
     }
 
-    const choices: Choice[] = JSON.parse(node.choices);
+    const choices: Choice[] = parseChoices(node.choices);
 
     res.json({
       id: node.id,
@@ -61,6 +83,10 @@ router.post(
       throw new AppError(400, 'playthroughId and choiceIndex are required');
     }
 
+    if (typeof choiceIndex !== 'number' || !Number.isInteger(choiceIndex) || choiceIndex < 0) {
+      throw new AppError(400, 'choiceIndex must be a non-negative integer');
+    }
+
     const playthrough = await prisma.playthrough.findUnique({
       where: { id: playthroughId },
       include: { current: true },
@@ -87,17 +113,28 @@ router.post(
       throw new AppError(404, 'Current narrative node not found');
     }
 
-    const choices: Choice[] = JSON.parse(currentNode.choices);
+    const choices: Choice[] = parseChoices(currentNode.choices);
 
-    if (choiceIndex < 0 || choiceIndex >= choices.length) {
+    if (choiceIndex >= choices.length) {
       throw new AppError(400, `Invalid choiceIndex. Must be 0-${choices.length - 1}`);
     }
 
     const chosenChoice = choices[choiceIndex]!;
 
-    if (chosenChoice.statGate && commanderStats) {
-      const statKey = chosenChoice.statGate.stat as keyof typeof commanderStats;
-      const statValue = commanderStats[statKey];
+    if (chosenChoice.statGate) {
+      if (!commanderStats) {
+        throw new AppError(
+          403,
+          `Commander stats required to choose "${chosenChoice.text}"`
+        );
+      }
+
+      const statKey = chosenChoice.statGate.stat;
+      if (!STAT_KEYS.includes(statKey as keyof CommanderStats)) {
+        throw new AppError(500, `Unknown stat gate: ${statKey}`);
+      }
+
+      const statValue = commanderStats[statKey as keyof CommanderStats];
       const minValue = chosenChoice.statGate.minValue;
 
       if (statValue < minValue) {
@@ -132,7 +169,7 @@ router.post(
       },
     });
 
-    const nextChoices: Choice[] = JSON.parse(nextNode.choices);
+    const nextChoices: Choice[] = parseChoices(nextNode.choices);
 
     res.json({
       chosenChoice,
