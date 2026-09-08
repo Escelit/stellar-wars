@@ -8,6 +8,8 @@ interface Choice {
   statGate?: { stat: string; minValue: number };
 }
 
+const VALID_STATS = ['attack', 'defense', 'strategy', 'influence', 'morale'];
+
 const narrativeNodes: Array<{
   id: string;
   chapter: number;
@@ -45,12 +47,12 @@ const narrativeNodes: Array<{
     choices: [
       {
         text: 'Press the attack — full power to weapons',
-        nextNodeId: 'ch1-start',
+        nextNodeId: 'ch1-victory',
         statGate: { stat: 'strategy', minValue: 70 },
       },
       {
         text: 'Fall back to the defense platform',
-        nextNodeId: 'ch1-start',
+        nextNodeId: 'ch1-defensive',
       },
     ],
   },
@@ -63,12 +65,12 @@ const narrativeNodes: Array<{
     choices: [
       {
         text: 'Launch a calculated counter-strike while they reposition',
-        nextNodeId: 'ch1-start',
+        nextNodeId: 'ch1-victory',
         statGate: { stat: 'strategy', minValue: 50 },
       },
       {
-        text: 'Hold position and wait for reinforcements',
-        nextNodeId: 'ch1-start',
+        text: 'Hold position and await the reinforcement fleet',
+        nextNodeId: 'ch1-victory',
       },
     ],
   },
@@ -81,12 +83,12 @@ const narrativeNodes: Array<{
     choices: [
       {
         text: 'Expose the forged treaty and prepare for battle',
-        nextNodeId: 'ch1-start',
-        statGate: { stat: 'charisma', minValue: 60 },
+        nextNodeId: 'ch1-victory',
+        statGate: { stat: 'influence', minValue: 60 },
       },
       {
         text: 'Play along and request a meeting',
-        nextNodeId: 'ch1-start',
+        nextNodeId: 'ch1-victory',
       },
     ],
   },
@@ -112,23 +114,114 @@ const narrativeNodes: Array<{
     choices: [
       {
         text: 'Investigate the command staff personally',
-        nextNodeId: 'ch1-start',
+        nextNodeId: 'ch2-investigate',
       },
       {
         text: 'Set a trap with false intelligence',
-        nextNodeId: 'ch1-start',
+        nextNodeId: 'ch2-trap',
       },
       {
         text: 'Request a full psychic scan of all personnel',
+        nextNodeId: 'ch2-scan',
+      },
+    ],
+  },
+  {
+    id: 'ch2-investigate',
+    chapter: 2,
+    title: 'Brush with the Fifth Column',
+    content:
+      'Your quiet review of the command staff turns up a logistics officer whose travel pattern never quite aligns with their duty roster. Every convoy they touched was later ambushed. The evidence is circumstantial — but damning.',
+    choices: [
+      {
+        text: 'Confront them with your evidence in private',
+        nextNodeId: 'ch2-victory',
+        statGate: { stat: 'influence', minValue: 70 },
+      },
+      {
+        text: 'Plant a listening device and observe',
+        nextNodeId: 'ch2-victory',
+      },
+    ],
+  },
+  {
+    id: 'ch2-trap',
+    chapter: 2,
+    title: 'Bait the Mole',
+    content:
+      'You broadcast false coordinates for the next supply convoy. Within the hour, the encoded routing data has been downloaded from the command terminal exactly once, by a ghost account that exists only on paper.',
+    choices: [
+      {
+        text: 'Kindle the trap and catch the courier red-handed',
+        nextNodeId: 'ch2-victory',
+        statGate: { stat: 'strategy', minValue: 70 },
+      },
+      {
+        text: 'Wait and see who moves to intercept the convoy',
+        nextNodeId: 'ch2-victory',
+      },
+    ],
+  },
+  {
+    id: 'ch2-scan',
+    chapter: 2,
+    title: 'Psychic Sweep',
+    content:
+      'The psychic scan completes. One officer carries a latent mind-link signature to the Crimson Armada — likely implanted without their knowledge. Purge it, and you may gain a valuable double agent. Fail, and you tip the mole off.',
+    choices: [
+      {
+        text: 'Sanction a surgical mind-purge',
+        nextNodeId: 'ch2-victory',
+        statGate: { stat: 'influence', minValue: 80 },
+      },
+      {
+        text: 'Lock them in a deep-frost cell while you decide',
+        nextNodeId: 'ch2-victory',
+      },
+    ],
+  },
+  {
+    id: 'ch2-victory',
+    chapter: 2,
+    title: 'The Conspirator Exposed',
+    content:
+      'The mole is exposed and the intelligence leak is sealed. High Command praises your judgment — but the Crimson Armada\'s coordinated timing was no coincidence. Somewhere above you, a larger betrayal is taking shape. The campaign continues.',
+    choices: [
+      {
+        text: 'Return to your flagship to await further orders',
         nextNodeId: 'ch1-start',
-        statGate: { stat: 'charisma', minValue: 80 },
       },
     ],
   },
 ];
 
+function validateGraph(nodes: typeof narrativeNodes) {
+  const ids = new Set(nodes.map((n) => n.id));
+  const errors: string[] = [];
+
+  for (const node of nodes) {
+    for (const choice of node.choices) {
+      if (!ids.has(choice.nextNodeId)) {
+        errors.push(
+          `Node '${node.id}' choice "${choice.text}" references unknown node '${choice.nextNodeId}'`
+        );
+      }
+      if (choice.statGate && !VALID_STATS.includes(choice.statGate.stat)) {
+        errors.push(
+          `Node '${node.id}' choice "${choice.text}" uses unknown stat '${choice.statGate.stat}'`
+        );
+      }
+    }
+  }
+
+  if (errors.length > 0) {
+    throw new Error(`Narrative graph validation failed:\n${errors.join('\n')}`);
+  }
+}
+
 async function main() {
   console.log('Seeding database...');
+  validateGraph(narrativeNodes);
 
   for (const node of narrativeNodes) {
     await prisma.narrativeNode.upsert({
