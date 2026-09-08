@@ -179,7 +179,6 @@ stellar-wars/
 ├── server/          Express + Prisma + PostgreSQL (port 4000)
 ├── contracts/       Soroban smart contracts (Rust/WASM)
 ├── scripts/         Deployment and utility scripts
-├── src/stellar/     Shared Stellar SDK wrappers
 ├── docs/            Architecture and setup documentation
 └── narrative/       Story nodes and faction data
 ```

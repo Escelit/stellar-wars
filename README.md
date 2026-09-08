@@ -398,7 +398,7 @@ If a commander's morale reaches 0 after a fatal defeat, `mark_fallen` is called 
 By default the app runs on **Stellar Testnet** for development. Set `STELLAR_NETWORK=mainnet` in production.
 
 ```typescript
-// src/stellar/config.ts
+// client/src/stellar/config.ts
 export const STELLAR_HORIZON =
   process.env.STELLAR_NETWORK === 'mainnet'
     ? 'https://horizon.stellar.org'
@@ -447,8 +447,10 @@ stellar-wars/
 ├── client/                     # React frontend
 │   └── src/
 │       ├── components/         # UI components
-│       ├── hooks/              # useStellarWallet, useCommander, useBattle...
+│       ├── hooks/              # useStellarWallet, useNarrative...
 │       ├── pages/              # Route pages
+│       ├── stellar/            # Stellar SDK wrappers (config, contracts,
+│       │                       #   wallet, soroban, api, ipfs)
 │       └── store/              # Zustand state
 ├── server/                     # Express backend
 │   ├── routes/
@@ -462,11 +464,6 @@ stellar-wars/
 │   │   └── src/lib.rs
 │   └── marketplace/            # Trustless XLM marketplace
 │       └── src/lib.rs
-├── src/stellar/                # JS Stellar SDK wrappers
-│   ├── config.ts
-│   ├── contracts.ts            # Contract invocation helpers
-│   ├── wallet.ts               # Freighter integration
-│   └── ipfs.ts                 # IPFS/Pinata upload helpers
 ├── narrative/                  # Story data
 │   ├── nodes/                  # JSON story node files
 │   └── factions/               # Faction lore

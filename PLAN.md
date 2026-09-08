@@ -171,7 +171,7 @@ stellar-wars/
 │       ├── hooks/             # useStellarWallet, useCommander, useNarrative...
 │       ├── pages/             # /mint, /game, /commanders, /profile, /
 │       ├── store/             # Zustand stores (wallet, game, commanders)
-│       ├── stellar/           # SDK wrappers copied from src/stellar/
+│       ├── stellar/           # Stellar SDK wrappers
 │       └── App.tsx            # Router + WalletProvider
 ├── server/
 │   ├── src/
@@ -185,7 +185,6 @@ stellar-wars/
 │   ├── battle_registry/       # Full impl + 15+ tests
 │   ├── marketplace/           # Full impl + 15+ tests
 │   └── target/                # Compiled WASM
-├── src/stellar/               # JS Stellar SDK wrappers
 ├── scripts/                   # deploy-contracts.sh, testnet-setup.sh, etc.
 ├── docs/                      # ARCHITECTURE.md, SETUP.md
 ├── AGENTS.md
