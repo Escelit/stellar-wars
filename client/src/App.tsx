@@ -8,6 +8,7 @@ const MintPage = lazy(() => import('@/pages/MintPage'));
 const GamePage = lazy(() => import('@/pages/GamePage'));
 const CommandersPage = lazy(() => import('@/pages/CommandersPage'));
 const MarketplacePage = lazy(() => import('@/pages/MarketplacePage'));
+const BattlePage = lazy(() => import('@/pages/BattlePage'));
 const ProfilePage = lazy(() => import('@/pages/ProfilePage'));
 
 export default function App() {
@@ -22,6 +23,7 @@ export default function App() {
               <Route path="/game" element={<GamePage />} />
               <Route path="/commanders" element={<CommandersPage />} />
               <Route path="/marketplace" element={<MarketplacePage />} />
+              <Route path="/battle" element={<BattlePage />} />
               <Route path="/profile" element={<ProfilePage />} />
             </Route>
           </Route>

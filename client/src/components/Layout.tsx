@@ -5,6 +5,7 @@ const navItems = [
   { to: '/', label: 'Dashboard' },
   { to: '/mint', label: 'Mint' },
   { to: '/game', label: 'Campaign' },
+  { to: '/battle', label: 'Battle' },
   { to: '/commanders', label: 'Commanders' },
   { to: '/marketplace', label: 'Marketplace' },
   { to: '/profile', label: 'Profile' },

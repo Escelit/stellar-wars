@@ -1,27 +1,35 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useStellarWallet } from '@/hooks/useStellarWallet';
-import { mintController } from '@/stellar/contracts';
+import { mintController, battleRegistry } from '@/stellar/contracts';
 import Button from '@/components/ui/Button';
 import Card from '@/components/ui/Card';
 
 export default function HomePage() {
   const { address, isConnected, connect, isConnecting } = useStellarWallet();
   const [commanderCount, setCommanderCount] = useState(0);
+  const [battleStats, setBattleStats] = useState({ total: 0, wins: 0 });
   const navigate = useNavigate();
 
   useEffect(() => {
     if (!address) {
       setCommanderCount(0);
+      setBattleStats({ total: 0, wins: 0 });
       return;
     }
 
-    mintController.getOwnedCommanders(address)
-      .then((commanders) => {
-        setCommanderCount(commanders.length);
+    Promise.all([
+      mintController.getOwnedCommanders(address),
+      battleRegistry.getPlayerBattles(address),
+    ])
+      .then(([commanders, battles]) => {
+        setCommanderCount(commanders?.length || 0);
+        const wins = (battles || []).filter((b) => b.outcome === 0).length;
+        setBattleStats({ total: battles?.length || 0, wins });
       })
       .catch(() => {
         setCommanderCount(0);
+        setBattleStats({ total: 0, wins: 0 });
       });
   }, [address]);
 
@@ -67,13 +75,13 @@ export default function HomePage() {
           <h3 className="mb-1 text-sm font-semibold uppercase tracking-wide text-cosmic-400">
             Battles
           </h3>
-          <p className="text-3xl font-bold text-stellar-100">0</p>
+          <p className="text-3xl font-bold text-stellar-100">{battleStats.total}</p>
         </Card>
         <Card className="text-center">
           <h3 className="mb-1 text-sm font-semibold uppercase tracking-wide text-cosmic-400">
             Victories
           </h3>
-          <p className="text-3xl font-bold text-stellar-100">0</p>
+          <p className="text-3xl font-bold text-stellar-100">{battleStats.wins}</p>
         </Card>
       </div>
     </div>
