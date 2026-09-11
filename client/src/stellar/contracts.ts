@@ -224,4 +224,15 @@ export const contractActions = {
       ],
     };
   },
+
+  cancelListing(seller: string, listingId: number) {
+    return {
+      contractId: CONTRACT_IDS.MARKETPLACE,
+      method: 'cancel_listing',
+      args: [
+        nativeToScVal(seller, { type: 'address' }),
+        nativeToScVal(listingId, { type: 'u32' }),
+      ],
+    };
+  },
 };
